@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import tn.mscvs.currencyconversionservice.domain.CurrencyConversion;
 import tn.mscvs.currencyconversionservice.domain.Exchange;
+import tn.mscvs.currencyconversionservice.services.CurrencyExchangeServiceProxy;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -17,8 +18,15 @@ public class CurrencyConversionController {
 
     private RestTemplate restTemplate;
 
+
+    private final CurrencyExchangeServiceProxy currencyExchangeServiceProxy;
+
     //private final String URI = "http://localhost:8000/currency-exchange/get?from={from}&to={to}";
     private final String URI = "http://localhost:8000/currency-exchange/get";
+
+    public CurrencyConversionController(CurrencyExchangeServiceProxy currencyExchangeServiceProxy) {
+        this.currencyExchangeServiceProxy = currencyExchangeServiceProxy;
+    }
 
     @GetMapping("/convert-currency/get")
     public CurrencyConversion convert(@RequestParam("from") String from,
@@ -61,6 +69,25 @@ public class CurrencyConversionController {
                 .port(responseEntity.getBody().getPort())
                 .build();
 
+        return resultConversion;
+    }
+
+    @GetMapping("/convert-currency-feign/get")
+    public CurrencyConversion convertWithFeign(@RequestParam("from") String from,
+                                               @RequestParam("to") String to,
+                                               @RequestParam("amount")BigDecimal amount){
+
+        Exchange exchangeResponse = currencyExchangeServiceProxy.getExchangeRate(from,to);
+
+            CurrencyConversion resultConversion = CurrencyConversion.builder()
+                    .id(exchangeResponse.getId())
+                    .from(from)
+                    .to(to)
+                    .conversionValue(exchangeResponse.getConversion())
+                    .amount(amount)
+                    .totalAmount(amount.multiply(exchangeResponse.getConversion()))
+                    .port(exchangeResponse.getPort())
+                    .build();
         return resultConversion;
     }
 
