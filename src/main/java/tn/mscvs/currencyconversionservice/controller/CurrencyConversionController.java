@@ -32,10 +32,7 @@ public class CurrencyConversionController {
     public CurrencyConversion convert(@RequestParam("from") String from,
                                       @RequestParam("to") String to,
                                       @RequestParam("amount")BigDecimal amount){
-        /* Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("from", from);
-        uriVariables.put("to", to);
-        */
+
         restTemplate = new RestTemplate();
 
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -48,16 +45,11 @@ public class CurrencyConversionController {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(URI)
                 .queryParam("from", from)
                 .queryParam("to", to);
-
-        //ResponseEntity<CurrencyConversion> responseEntity = restTemplate.getForEntity(URI, CurrencyConversion.class, uriVariables);
-
         ResponseEntity<Exchange> responseEntity = restTemplate.exchange(
                 uriBuilder.toUriString(),
                 HttpMethod.GET,
                 requestEntity,
                 Exchange.class );
-
-        //CurrencyConversion currencyConversion = responseEntity.getBody().;
 
         CurrencyConversion resultConversion = CurrencyConversion.builder()
                 .id(responseEntity.getBody().getId())
