@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "cn-currency-exchange-service.ribbon.listOfServers",
+      "type": "java.lang.String",
+      "description": "Description for cn-currency-exchange-service.ribbon.listOfServers."
+    },
+
+    {
+      "name": "cn-currency-exchange-service.ribbon.ServerListRefreshInterval",
+      "type": "java.lang.Integer",
+      "description": "Description for cn-currency-exchange-service.ribbon.ServerListRefreshInterval."
+    }
+  ] }
