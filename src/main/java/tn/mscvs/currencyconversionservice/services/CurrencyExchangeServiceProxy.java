@@ -6,12 +6,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import tn.mscvs.currencyconversionservice.domain.Exchange;
 
-//@FeignClient(name = "cn-currency-exchange-service", url = "http://localhost:8000")
-@FeignClient(name = "cn-currency-exchange-service")
+//@FeignClient(name = "cn-currency-exchange-service", url = "http://localhost:8000") 1st change
+//@FeignClient(name = "cn-currency-exchange-service") 2nd change
+@FeignClient(name = "cn-zuul-api-gateway-server")
 @RibbonClient(name = "cn-currency-exchange-service")
 public interface CurrencyExchangeServiceProxy {
 
-    @GetMapping("/currency-exchange/get")
+    //@GetMapping("/currency-exchange/get")
+    @GetMapping("/cn-currency-exchange-service/currency-exchange/get")
     public Exchange getExchangeRate(@RequestParam("from") String from,
                                     @RequestParam("to") String to);
 }
