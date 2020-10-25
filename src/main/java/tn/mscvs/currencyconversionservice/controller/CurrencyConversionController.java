@@ -1,5 +1,6 @@
 package tn.mscvs.currencyconversionservice.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,7 @@ import tn.mscvs.currencyconversionservice.services.CurrencyExchangeServiceProxy;
 import java.math.BigDecimal;
 import java.util.Collections;
 
+@Slf4j
 @RestController
 public class CurrencyConversionController {
 
@@ -71,7 +73,9 @@ public class CurrencyConversionController {
 
         Exchange exchangeResponse = currencyExchangeServiceProxy.getExchangeRate(from,to);
 
-            CurrencyConversion resultConversion = CurrencyConversion.builder()
+
+
+        CurrencyConversion resultConversion = CurrencyConversion.builder()
                     .id(exchangeResponse.getId())
                     .from(from)
                     .to(to)
@@ -80,6 +84,9 @@ public class CurrencyConversionController {
                     .totalAmount(amount.multiply(exchangeResponse.getConversion()))
                     .port(exchangeResponse.getPort())
                     .build();
+
+        log.info("{}", resultConversion);
+
         return resultConversion;
     }
 
